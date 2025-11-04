@@ -1,10 +1,10 @@
-# Use uma imagem oficial do PHP com Apache
+# 1️⃣ Imagem base com PHP e Apache
 FROM php:8.2-apache
 
-# Defina diretório de trabalho
+# 2️⃣ Diretório de trabalho
 WORKDIR /var/www/html
 
-# Instale dependências do sistema e extensões PHP necessárias
+# 3️⃣ Instalar dependências do sistema e extensões PHP necessárias
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -14,20 +14,20 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath sockets \
     && docker-php-source delete
 
-# Habilite o mod_rewrite do Apache (necessário para muitos frameworks)
+# 4️⃣ Habilitar mod_rewrite do Apache
 RUN a2enmod rewrite
 
-# Instale Composer globalmente
+# 5️⃣ Instalar Composer globalmente
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copie os arquivos do projeto para o container
+# 6️⃣ Copiar arquivos do projeto
 COPY . .
 
-# Instale dependências do PHP sem os dev e otimizando autoload
+# 7️⃣ Instalar dependências PHP do projeto
 RUN composer install --no-dev --optimize-autoloader
 
-# Exponha a porta padrão do Apache
+# 8️⃣ Expor porta 80
 EXPOSE 80
 
-# Comando padrão ao iniciar o container
+# 9️⃣ Comando padrão
 CMD ["apache2-foreground"]
